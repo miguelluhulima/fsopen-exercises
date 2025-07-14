@@ -5,17 +5,20 @@ const Button = ({onClick, text}) => <button onClick={onClick}>{text}</button>
 const Review = ({title, count, subtitle=""}) => <p>{title} {count} {subtitle}</p>
 
 const Statistics = (props) => {
-  return (
-    <div>
-      <h1>Statistics</h1>
-      <Review title="Good" count={props.good}/>
-      <Review title="Neutral" count={props.neutral}/>
-      <Review title="Bad" count={props.bad}/>
-      <Review title="All" count={props.all}/>
-      <Review title="Average" count={props.average}/>
-      <Review title="Positive" count={props.positive} subtitle='%'/>
-    </div>
-  )
+  if (props.all == 0) {
+    return <p>No feedback given</p>
+  } else {
+    return (
+      <div>
+        <Review title="Good" count={props.good}/>
+        <Review title="Neutral" count={props.neutral}/>
+        <Review title="Bad" count={props.bad}/>
+        <Review title="All" count={props.all}/>
+        <Review title="Average" count={props.average}/>
+        <Review title="Positive" count={props.positive} subtitle='%'/>
+      </div>
+    )
+  }
 }
 
 const App = () => {
@@ -36,6 +39,7 @@ const App = () => {
       <Button onClick={addGood} text="Good"/>
       <Button onClick={addNeutral} text="Neutral"/>
       <Button onClick={addBad} text="Bad"/>
+      <h1>Statistics</h1>
       <Statistics 
         good={good}
         neutral={neutral}
