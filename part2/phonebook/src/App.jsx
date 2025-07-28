@@ -1,22 +1,27 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+
+import axios from 'axios'
 
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-1234567'},
-    { name: 'Ada Lovelace', number: '39-44-5323523'},
-    { name: 'Dan Abramov', number: '12-43-234345'}
-  ])
-
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
 
+  useEffect(() => {
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        setPersons(response.data)
+      })
+  }, [])
+
   const [filter, setFilter] = useState('')
   var filteredList = filter
-    ? persons.filter(person => {return person.name.toLowerCase().indexOf(filter.toLowerCase()) >= 0})
+    ? persons.filter(person => { return person.name.toLowerCase().indexOf(filter.toLowerCase()) >= 0 })
     : persons
 
   const addPerson = (event) => {
@@ -44,7 +49,7 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <form>
-        <Filter filter={filter} handleFilterChange={handleFilterChange}/>
+        <Filter filter={filter} handleFilterChange={handleFilterChange} />
       </form>
       <h2>Add a new</h2>
       <PersonForm
