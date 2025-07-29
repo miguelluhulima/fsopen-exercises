@@ -5,11 +5,13 @@ import phonebookService from './services/phonebook'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Person from './components/Person'
+import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+  const [message, setMessage] = useState(null)
 
   useEffect(() => {
     phonebookService
@@ -23,6 +25,11 @@ const App = () => {
   var filteredList = filter
     ? persons.filter(person => { return person.name.toLowerCase().indexOf(filter.toLowerCase()) >= 0 })
     : persons
+
+  const showMessage = (msg) => {
+    setMessage(msg)
+    setTimeout(() => setMessage(null), 5000)
+  }
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -40,6 +47,7 @@ const App = () => {
           .update(existingPerson.id, personObject)
           .then(updatedPerson => {
             setPersons(persons.map(p => p.id !== existingPerson.id ? p : updatedPerson))
+            showMessage(`${personObject.name} added to contacts`)
           })
       }
     } else {
@@ -48,6 +56,7 @@ const App = () => {
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
         })
+      showMessage(`${personObject.name} added to contacts`)
     }
     setNewName('')
     setNewNumber('')
@@ -69,6 +78,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
       <form>
         <Filter filter={filter} handleFilterChange={handleFilterChange} />
       </form>
