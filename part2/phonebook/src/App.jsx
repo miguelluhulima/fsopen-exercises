@@ -45,6 +45,15 @@ const App = () => {
     setNewNumber('')
   }
 
+  const deletePerson = (id, name) => {
+    if (window.confirm(`Do you want to delete ${name}'s number?`)) {
+      phonebookService.deletePerson(id)
+        .then(() => {
+          setPersons(prevPersons => prevPersons.filter(person => person.id !== id))
+        })
+    }
+  }
+
   const handleNameChange = (event) => setNewName(event.target.value)
   const handleNumberChange = (event) => setNewNumber(event.target.value)
   const handleFilterChange = (event) => setFilter(event.target.value)
@@ -70,6 +79,7 @@ const App = () => {
             <Person
               key={person.id}
               person={person}
+              deletePerson={() => { deletePerson(person.id, person.name) }}
             />
           ))
         }
