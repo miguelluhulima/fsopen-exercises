@@ -4,7 +4,7 @@ import axios from 'axios'
 
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
-import Persons from './components/Persons'
+import Person from './components/Person'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -35,7 +35,11 @@ const App = () => {
     if (persons.some(person => person.name === personObject.name)) {
       alert(`${personObject.name} is already added to phonebook`)
     } else {
-      setPersons(persons.concat(personObject))
+      axios
+        .post('http://localhost:3001/persons', personObject)
+        .then(response => {
+          setPersons(persons.concat(response.data))
+        })
     }
     setNewName('')
     setNewNumber('')
@@ -60,7 +64,16 @@ const App = () => {
         addPerson={addPerson}
       />
       <h2>Numbers</h2>
-      <Persons filteredList={filteredList} />
+      <ul>
+        {
+          filteredList.map(person => (
+            <Person
+              key={person.id}
+              person={person}
+            />
+          ))
+        }
+      </ul>
     </div>
   )
 }
