@@ -47,7 +47,11 @@ const App = () => {
           .update(existingPerson.id, personObject)
           .then(updatedPerson => {
             setPersons(persons.map(p => p.id !== existingPerson.id ? p : updatedPerson))
-            showMessage(`${personObject.name} added to contacts`)
+            showMessage(`${personObject.name}'s number changed`)
+          })
+          .catch(error => {
+            showMessage(`${personObject.name} has already been removed`)
+            setPersons(prevPersons => prevPersons.filter(p => p.name !== personObject.name))
           })
       }
     } else {
@@ -55,8 +59,12 @@ const App = () => {
         .create(personObject)
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
+          showMessage(`${personObject.name} added to contacts`)
         })
-      showMessage(`${personObject.name} added to contacts`)
+        .catch(error => {
+          showMessage(`${personObject.name} has already been removed`)
+          setPersons(prevPersons => prevPersons.filter(p => p.name !== personObject.name))
+        })
     }
     setNewName('')
     setNewNumber('')
