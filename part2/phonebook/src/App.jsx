@@ -19,7 +19,7 @@ const App = () => {
       .then(initialPersons => {
         setPersons(initialPersons)
       })
-  }, [])
+  }, [persons])
 
   const [filter, setFilter] = useState('')
   var filteredList = filter
