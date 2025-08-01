@@ -40,7 +40,9 @@ const App = () => {
     else setCountry(null)
   }, [filteredList])
 
-  const handleFilterChange = (event) => { setValue(event.target.value) }
+  const handleFilterChange = (event) => setValue(event.target.value)
+
+  const handleClick = (name) => setCountry(name)
 
   return (
     <div>
@@ -51,7 +53,7 @@ const App = () => {
         value === '' ? <p>Search a country</p>
           : filteredList.length > 10 ? <p>Too many matches</p>
             : country !== null ? <Country countryInfo={countryInfo} />
-              : <CountryList filteredList={filteredList} />
+              : <CountryList filteredList={filteredList} handleClick={handleClick} />
       }
     </div>
   )
